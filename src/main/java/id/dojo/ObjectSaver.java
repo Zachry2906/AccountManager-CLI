@@ -8,27 +8,50 @@ public class ObjectSaver{
 
     public static void saveObject(Object object){
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(object);
-            objectOutputStream.flush();
+            //menulis data dalam bytearray
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            //untuk menulis objek Java ke dalam stream
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            //Metode writeObject() dari ObjectOutputStream digunakan untuk menulis objek Java ke dalam stream.
+            oos.writeObject(object);
+            //untuk memastikan bahwa semua data yang ditulis ke stream sebenarnya ditulis ke ByteArrayOutputStream
+            oos.flush();
+            //mengubah data dalam bentuk byte array
+            byte[] objectBytes = baos.toByteArray();
 
-            objectOutputStream.close();
-            fileOutputStream.close();
+            String base64Data = Base64.getEncoder().encodeToString(objectBytes);
+
+            FileWriter fileWriter = new FileWriter(fileName);
+            fileWriter.write(base64Data);
+            fileWriter.close();
+
+            oos.close();
+            baos.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static Object retrieveObject(){
-        Object object = null;
         try {
-            FileInputStream fileInputStream = new FileInputStream(fileName);
-            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            object = objectInputStream.readObject();
+            FileReader fileReader = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String base64Data = bufferedReader.readLine();
+            bufferedReader.close();
+            fileReader.close();
 
-            fileInputStream.close();
-            objectInputStream.close();
+            if (base64Data != null) {
+                byte[] objectBytes = Base64.getDecoder().decode(base64Data);
+                ByteArrayInputStream bais = new ByteArrayInputStream(objectBytes);
+                ObjectInputStream ois = new ObjectInputStream(bais);
+                Object object = ois.readObject();
+                ois.close();
+                bais.close();
+
+                return object;
+            } else {
+                return null;
+            }
         } catch (FileNotFoundException e) {
             return null;
         } catch (IOException e) {
@@ -36,8 +59,6 @@ public class ObjectSaver{
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-
-        return object;
     }
 
         public static byte[] serializeObject(Object object) {

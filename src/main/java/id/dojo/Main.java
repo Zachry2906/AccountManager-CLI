@@ -127,7 +127,7 @@ public class Main {
         Object objecttt = ObjectSaver.retrieveObject();
         List<Account> AccList = new ArrayList<>();
         if (objecttt != null && objecttt instanceof List) {
-            List<Account> account1 = (List<Account>) objecttt;
+            List<Account> account1 = AccList;
             for (Account acc : account1) {
                 Account account = new Account(acc.getAccountName(), acc.getUsername(), acc.getPassword(), acc.getUrl(), acc.getTime(), acc.getEncrypt());
                 AccList.add(account);
@@ -158,8 +158,8 @@ public class Main {
         ObjectSaver.fileName = filePass;
         Object object1 = ObjectSaver.retrieveObject();
         if (object1 instanceof List) {
-            List<Account> account1 = (List<Account>) object1;
-            for (Account acc : account1) {
+            List<Account> accounts = (List<Account>) object1;
+            for (Account acc : accounts) {
                 if (acc.getAccountName().equals(accountName1)) {
                     if (acc.getEncrypt()) {
                         System.out.print("Password Baru : ");
@@ -181,7 +181,7 @@ public class Main {
                     acc.setTime(LocalDateTime.now().toString());
                 }
             }
-            ObjectSaver.saveObject(account1);
+            ObjectSaver.saveObject(accounts);
 
         }
 
