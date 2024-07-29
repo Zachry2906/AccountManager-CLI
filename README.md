@@ -56,8 +56,3 @@ While this application uses encryption methods to enhance security, please note 
 
 Feel free to fork this project and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
 
-## Acknowledgements
-
-- Javalin Framework: [https://javalin.io/](https://javalin.io/)
-- jQuery: [https://jquery.com/](https://jquery.com/)
-- Bootstrap: [https://getbootstrap.com/](https://getbootstrap.com/)
