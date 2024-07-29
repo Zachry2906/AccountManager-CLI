@@ -12,6 +12,7 @@ import java.util.Base64;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+    //set your file path here, make sure password and history  file in the same folder
     static String filePass = "/home/zachry/Documents/accountManager/password.txt";
     static String fileHistory = "/home/zachry/Documents/accountManager/history.txt";
     public static boolean ulang = false;
@@ -47,21 +48,27 @@ public class Main {
 
         switch (menu) {
             case 1:
+                clearScreen();
                 tampilData();
                 break;
             case 2:
+                clearScreen();
                 tampilDataTerpilih();
                 break;
             case 3:
+                clearScreen();
                 tambahAkun();
                 break;
             case 4:
+                clearScreen();
                 ubahPassword();
                 break;
             case 5:
+                clearScreen();
                 riwayatPerubahanPassword();
                 break;
             case 6:
+                clearScreen();
                 hapusAkun();
                 break;
             case 7:
@@ -115,6 +122,7 @@ public class Main {
         if (enkripsi.equals("Y") || enkripsi.equals("y")) {
             System.out.print("Password yg akan dienkripsi : ");
             password = scanner.next();
+            //use your own key to encrypt
             password = VigeneCipher.encrypt(password, "ZACHRY");
             enkrip = true;
         } else {
@@ -127,7 +135,7 @@ public class Main {
         Object objecttt = ObjectSaver.retrieveObject();
         List<Account> AccList = new ArrayList<>();
         if (objecttt != null && objecttt instanceof List) {
-            List<Account> account1 = AccList;
+            List<Account> account1 = (List<Account>) objecttt;
             for (Account acc : account1) {
                 Account account = new Account(acc.getAccountName(), acc.getUsername(), acc.getPassword(), acc.getUrl(), acc.getTime(), acc.getEncrypt());
                 AccList.add(account);
@@ -234,6 +242,7 @@ public class Main {
     }
 
     public static void clearScreen() {
-        for (int i = 0; i < 50; ++i) System.out.println();
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
